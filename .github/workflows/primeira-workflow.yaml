@@ -1,3 +1,4 @@
+name: Tentando criar a primeira Workflow
 on: push
 
 jobs:
