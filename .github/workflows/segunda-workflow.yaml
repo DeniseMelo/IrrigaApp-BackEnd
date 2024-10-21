@@ -2,11 +2,35 @@ name: 02 - Workflow Filtro
 
 on:
   push:
-    branches: 'feature/**'
+    branches: 'feature/**' #qualquer branch que comece com feature/**
 
 jobs:
-  echo:
+  build:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and test with Maven
+        run: mvn clean install
+
+      - name: Run tests
+        run: mvn test
+
       - name: Exibir o evento
         run: echo "Workflow disparado por ${{ github.event_name }}"
