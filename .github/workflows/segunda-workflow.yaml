@@ -2,7 +2,9 @@ name: 02 - Workflow Filtro
 
 on:
   push:
-    branches: 'feature/**' #qualquer branch que comece com feature/**
+    branches:
+      - 'feature/**'  # Qualquer branch que comece com feature/**
+      - 'main'        # Também monitora a branch main
 
 jobs:
   build:
