@@ -25,3 +25,4 @@ public class Sensor {
     private Double longitude;
 
 }
+//adicionando um comentario  para testar a workflow novamente

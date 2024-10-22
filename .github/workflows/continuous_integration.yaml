@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do repositório
+      
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      # Configurar o JDK (Java 21 com Temurin)
+      
       - name: Setup Java SDK
         uses: actions/setup-java@v4
         with:
@@ -33,9 +33,10 @@ jobs:
       - name: Run API Tests
         run: mvn verify -P api-tests
 
-      # Publicar relatórios de testes (opcional)
+      # Publicar relatórios de testes 
       - name: Publish Test Report
         uses: actions/upload-artifact@v2
         with:
           name: test-results
           path: target/surefire-reports/
+
