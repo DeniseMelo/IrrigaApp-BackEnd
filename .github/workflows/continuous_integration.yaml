@@ -1,0 +1,41 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: "feature/**"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout do repositório
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      # Configurar o JDK (Java 21 com Temurin)
+      - name: Setup Java SDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # Rodar testes unitários
+      - name: Run Unit Tests
+        run: mvn test
+
+      # Rodar testes BDD (com Cucumber)
+      - name: Run BDD Tests
+        run: mvn verify -P bdd-tests
+
+      # Rodar testes de API (com RestAssured)
+      - name: Run API Tests
+        run: mvn verify -P api-tests
+
+      # Publicar relatórios de testes (opcional)
+      - name: Publish Test Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: target/surefire-reports/
