@@ -9,8 +9,14 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      secrets: write
+
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
+      # Secrets armazenados em base64
+      MONGO_URI_BASE64: ${{ secrets.MONGO_URI }}
+      MONGO_URI_TEST_BASE64: ${{ secrets.MONGO_URI_TEST }}
 
     steps:
       - name: Git Checkout
@@ -22,36 +28,38 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Verificar se a variável MONGO_URI está presente e capturar o valor
-      - name: Verificar e capturar o valor de MONGO_URI
+      # Decodifica os secrets base64 para contornar caracteres especiais
+      - name: Decode MongoDB URIs
         run: |
-          if [ -z "$MONGO_URI" ]; then
-            echo "Erro: A variável de ambiente MONGO_URI não está definida."
-            exit 1
-          else
-            echo "A variável MONGO_URI está definida com o valor: $MONGO_URI"
-          fi
+          echo "$MONGO_URI_BASE64" | base64 --decode > decoded_mongo_uri.txt
+          echo "$MONGO_URI_TEST_BASE64" | base64 --decode > decoded_mongo_uri_test.txt
+
+      # Define as variáveis de ambiente com os valores decodificados
+      - name: Set MongoDB URIs Environment Variables
+        run: |
+          echo "MONGO_URI=$(cat decoded_mongo_uri.txt)" >> $GITHUB_ENV
+          echo "MONGO_URI_TEST=$(cat decoded_mongo_uri_test.txt)" >> $GITHUB_ENV
+
+      # Verifica se as URIs foram decodificadas corretamente
+      - name: Verify MongoDB URIs
+        run: |
+          echo "MONGO_URI is set to $MONGO_URI"
+          echo "MONGO_URI_TEST is set to $MONGO_URI_TEST"
         shell: bash
 
-      # Rodar testes unitários com MONGO_URI definido
+      # Rodar testes unitários com o URI de teste
       - name: Run Unit Tests
-        run: mvn test
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI_TEST
 
-      # Rodar testes BDD (com Cucumber) com MONGO_URI definido
+      # Rodar testes BDD (com Cucumber)
       - name: Run BDD Tests
-        run: mvn verify -P bdd-tests
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI_TEST
 
-      # Rodar testes de API (com RestAssured) com MONGO_URI definido
+      # Rodar testes de API (com RestAssured)
       - name: Run API Tests
-        run: mvn verify -P api-tests
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI_TEST
 
-      # Publicar relatórios
+      # Publicar relatórios de testes
       - name: Publish Test Report
         uses: actions/upload-artifact@v2
         with:
