@@ -51,7 +51,7 @@ jobs:
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
 
-      # Publicar relatórios de testes
+      # Publicar relatórios
       - name: Publish Test Report
         uses: actions/upload-artifact@v2
         with:
