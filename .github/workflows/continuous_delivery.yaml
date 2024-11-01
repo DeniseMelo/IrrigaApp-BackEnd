@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: denisecmf/irrigaapp
+  IMAGE_NAME: irrigaapp
   AZURE_WEBAPP_NAME: irriga-app-api-dev
   MONGO_URI: ${{ secrets.MONGO_URI }}
 
