@@ -15,7 +15,6 @@ jobs:
 
     permissions:
       contents: read
-      secrets: write
 
     env:
       # Secrets armazenados em base64
