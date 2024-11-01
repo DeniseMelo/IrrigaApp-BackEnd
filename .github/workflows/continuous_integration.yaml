@@ -22,22 +22,34 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Verificar se a variável MONGO_URI está correta
-      - name: Verify MongoDB URI
-        run: echo "MONGO_URI is set to $MONGO_URI"
+      # Verificar se a variável MONGO_URI está presente e capturar o valor
+      - name: Verificar e capturar o valor de MONGO_URI
+        run: |
+          if [ -z "$MONGO_URI" ]; then
+            echo "Erro: A variável de ambiente MONGO_URI não está definida."
+            exit 1
+          else
+            echo "A variável MONGO_URI está definida com o valor: $MONGO_URI"
+          fi
         shell: bash
 
-      # Rodar testes unitários
+      # Rodar testes unitários com MONGO_URI definido
       - name: Run Unit Tests
         run: mvn test
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
-      # Rodar testes BDD (com Cucumber)
+      # Rodar testes BDD (com Cucumber) com MONGO_URI definido
       - name: Run BDD Tests
         run: mvn verify -P bdd-tests
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
-      # Rodar testes de API (com RestAssured)
+      # Rodar testes de API (com RestAssured) com MONGO_URI definido
       - name: Run API Tests
         run: mvn verify -P api-tests
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
       # Publicar relatórios de testes
       - name: Publish Test Report
