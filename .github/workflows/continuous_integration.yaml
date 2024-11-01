@@ -7,19 +7,16 @@ on:
   pull_request:
     types: [opened, reopened]
     branches:
-      - feature/**
+      - "feature/**"
+      - main
 
 jobs:
   tests:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-
     env:
-      # Secrets armazenados em base64
-      MONGO_URI_BASE64: ${{ secrets.MONGO_URI }}
-      MONGO_URI_TEST_BASE64: ${{ secrets.MONGO_URI_TEST }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
 
     steps:
       - name: Git Checkout
@@ -31,24 +28,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Decodifica os secrets base64 para contornar caracteres especiais
-      - name: Decode MongoDB URIs
-        run: |
-          echo "$MONGO_URI_BASE64" | base64 --decode > decoded_mongo_uri.txt
-          echo "$MONGO_URI_TEST_BASE64" | base64 --decode > decoded_mongo_uri_test.txt
-
-      # Define as variáveis de ambiente com os valores decodificados
-      - name: Set MongoDB URIs Environment Variables
-        run: |
-          echo "MONGO_URI=$(cat decoded_mongo_uri.txt)" >> $GITHUB_ENV
-          echo "MONGO_URI_TEST=$(cat decoded_mongo_uri_test.txt)" >> $GITHUB_ENV
-
-      # Verifica se as URIs foram decodificadas corretamente
-      - name: Verify MongoDB URIs
+      # Verifica se a URI foi passada corretamente
+      - name: Verify MongoDB URI
         run: |
           echo "MONGO_URI is set to $MONGO_URI"
           echo "MONGO_URI_TEST is set to $MONGO_URI_TEST"
-        shell: bash
 
       # Rodar testes unitários com o URI de teste
       - name: Run Unit Tests
