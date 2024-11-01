@@ -13,7 +13,7 @@ import br.com.fiap.IrrigaApp.security.config.TokenService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/usuarios")
 public class AuthController {
 
     @Autowired
@@ -40,11 +40,5 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Usuario> registrar(@RequestBody @Valid Usuario usuario) {
-        Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
-    }
 
 }

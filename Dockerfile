@@ -8,6 +8,5 @@ FROM eclipse-temurin:21-jre-alpine
 RUN mkdir /opt/app
 COPY --from=build /opt/app/target/IrrigaApp-0.0.1-SNAPSHOT.jar /opt/app/app.jar
 WORKDIR /opt/app
-ENV PROFILE=prd
 EXPOSE 8080
-ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILE}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

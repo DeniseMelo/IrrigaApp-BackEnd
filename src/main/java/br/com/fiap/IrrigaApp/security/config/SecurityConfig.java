@@ -28,15 +28,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        // Endpoints de gerenciamento de usuários acessíveis apenas para ADMIN
-                        .requestMatchers(HttpMethod.GET, "/usuarios").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("ADMIN")
-                        // Outros endpoints autenticados para USER e ADMIN
-                        .requestMatchers(HttpMethod.GET, "/api/sensores").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/sensores").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/usuarios/cadastrar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                        .requestMatchers("/usuarios/**").hasRole("ADMIN") // Restrição apenas para endpoints de usuário
                         .anyRequest().authenticated())
                 .addFilterBefore(verificarToken, UsernamePasswordAuthenticationFilter.class)
                 .build();
