@@ -30,8 +30,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Maven Build with MongoDB URI
-        run: mvn clean package -Dspring.data.mongodb.uri=${{ secrets.MONGO_URI }}
+      - name: Maven Build
+        run: mvn clean package
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
