@@ -22,17 +22,22 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      # Rodar testes unitários com o perfil de teste ativo
+      # Verificar se a variável MONGO_URI está correta
+      - name: Verify MongoDB URI
+        run: echo "MONGO_URI is set to $MONGO_URI"
+        shell: bash
+
+      # Rodar testes unitários
       - name: Run Unit Tests
-        run: mvn test -Dspring.profiles.active=test
+        run: mvn test
 
-      # Rodar testes BDD (com Cucumber) com o perfil de teste ativo
+      # Rodar testes BDD (com Cucumber)
       - name: Run BDD Tests
-        run: mvn verify -P bdd-tests -Dspring.profiles.active=test
+        run: mvn verify -P bdd-tests
 
-      # Rodar testes de API (com RestAssured) com o perfil de teste ativo
+      # Rodar testes de API (com RestAssured)
       - name: Run API Tests
-        run: mvn verify -P api-tests -Dspring.profiles.active=test
+        run: mvn verify -P api-tests
 
       # Publicar relatórios de testes
       - name: Publish Test Report
