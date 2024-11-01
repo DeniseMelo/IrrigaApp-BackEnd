@@ -30,6 +30,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Verify Docker Login
+        run: |
+          docker info    
+
       - name: Maven Build
         run: mvn clean package
 
