@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_NAME: denisecmf/irrigaapp
   AZURE_WEBAPP_NAME: irriga-app-api-dev
-  MONGO_URI: "mongodb://localhost:27017/fake"
+  MONGO_URI: ${{ secrets.MONGO_URI }}
 
 jobs:
   build:
