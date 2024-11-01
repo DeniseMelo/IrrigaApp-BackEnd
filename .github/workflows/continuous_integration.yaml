@@ -31,19 +31,18 @@ jobs:
       - name: Verify MongoDB URI
         run: |
           echo "MONGO_URI is set to $MONGO_URI"
-          echo "MONGO_URI_TEST is set to $MONGO_URI_TEST"
 
-      # Rodar testes unitários com o URI de teste
+      # Rodar testes unitários com o URI principal
       - name: Run Unit Tests
-        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI_TEST
+        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI
 
       # Rodar testes BDD (com Cucumber)
       - name: Run BDD Tests
-        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI_TEST
+        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI
 
       # Rodar testes de API (com RestAssured)
       - name: Run API Tests
-        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI_TEST
+        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI
 
       # Publicar relatórios de testes
       - name: Publish Test Report
