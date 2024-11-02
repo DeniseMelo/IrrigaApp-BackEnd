@@ -1,9 +1,10 @@
 package br.com.fiap.IrrigaApp.service;
 
 
+import br.com.fiap.IrrigaApp.exception.UsuarioJaCadastradoException;
+import br.com.fiap.IrrigaApp.exception.UsuarioNaoEncontradoException;
 import br.com.fiap.IrrigaApp.model.Usuario;
 import br.com.fiap.IrrigaApp.repository.UsuarioRepository;
-import exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,9 +20,24 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Override
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public Usuario salvarUsuario(Usuario usuario) {
-        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
+        // Verifica se o email já existe
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+
+            throw new UsuarioJaCadastradoException("Usuário com este e-mail já está cadastrado.");
+        }
+
+        // Valida campos obrigatórios
+        if (usuario.getNome() == null || usuario.getNome().isEmpty() ||
+                usuario.getEmail() == null || usuario.getEmail().isEmpty() ||
+                usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
+            throw new IllegalArgumentException("Todos os campos são obrigatórios.");
+        }
+
+        // Criptografa a senha e salva o usuário
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
         return usuarioRepository.save(usuario);
     }

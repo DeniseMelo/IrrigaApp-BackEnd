@@ -1,7 +1,9 @@
 package br.com.fiap.IrrigaApp.controller;
 
+import br.com.fiap.IrrigaApp.exception.UsuarioJaCadastradoException;
 import br.com.fiap.IrrigaApp.model.Usuario;
 import br.com.fiap.IrrigaApp.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +20,14 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Endpoint para cadastrar um novo usuário
     @PostMapping("/cadastrar")
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario novoUsuario) {
-        Usuario usuarioSalvo = usuarioService.salvarUsuario(novoUsuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
+    public ResponseEntity<?> cadastrarUsuario(@Valid @RequestBody Usuario novoUsuario) {
+        try {
+            Usuario usuarioSalvo = usuarioService.salvarUsuario(novoUsuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
+        } catch (UsuarioJaCadastradoException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
     // Atualiza o usuário (nome e senha)

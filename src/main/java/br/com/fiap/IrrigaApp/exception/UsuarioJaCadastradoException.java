@@ -1,13 +1,12 @@
 package br.com.fiap.IrrigaApp.exception;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class UsuarioNaoEncontradoException extends RuntimeException {
+@ResponseStatus(HttpStatus.CONFLICT)
+public class UsuarioJaCadastradoException extends RuntimeException {
 
-    public UsuarioNaoEncontradoException(String message){
+    public UsuarioJaCadastradoException(String message) {
         super(message);
     }
 }

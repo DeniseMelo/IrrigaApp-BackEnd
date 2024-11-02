@@ -1,5 +1,9 @@
 package br.com.fiap.IrrigaApp.model;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,10 +25,17 @@ public class Usuario implements UserDetails {
     @Id
     private String usuarioId;
 
+    @NotNull(message = "Nome é obrigatório.")
+    @NotEmpty(message = "Nome não pode estar vazio.")
     private String nome;
 
+    @NotNull(message = "Email é obrigatório.")
+    @NotEmpty(message = "Email não pode estar vazio.")
+    @Email(message = "Email deve ser válido.")
     private String email;
 
+    @NotNull(message = "Senha é obrigatória.")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres.")
     private String senha;
 
     private UsuarioRole role;
