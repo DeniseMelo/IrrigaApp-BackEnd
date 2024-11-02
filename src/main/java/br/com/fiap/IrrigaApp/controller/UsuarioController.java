@@ -3,6 +3,7 @@ package br.com.fiap.IrrigaApp.controller;
 import br.com.fiap.IrrigaApp.exception.UsuarioJaCadastradoException;
 import br.com.fiap.IrrigaApp.model.Usuario;
 import br.com.fiap.IrrigaApp.service.UsuarioService;
+import com.mongodb.DuplicateKeyException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,10 @@ public class UsuarioController {
         try {
             Usuario usuarioSalvo = usuarioService.salvarUsuario(novoUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
-        } catch (UsuarioJaCadastradoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (DuplicateKeyException e) {
+            System.out.println("Usuario já cadastrado: Nome=" + novoUsuario.getEmail());
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Email já está em uso.");
         }
     }
 

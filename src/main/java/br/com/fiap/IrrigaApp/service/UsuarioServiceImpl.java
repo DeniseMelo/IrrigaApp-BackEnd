@@ -23,13 +23,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Usuario salvarUsuario(Usuario usuario) {
-        // Verifica se o email já existe
-        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
 
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new UsuarioJaCadastradoException("Usuário com este e-mail já está cadastrado.");
         }
 
-        // Valida campos obrigatórios
+        // Valida apesar de usar o valid no model
         if (usuario.getNome() == null || usuario.getNome().isEmpty() ||
                 usuario.getEmail() == null || usuario.getEmail().isEmpty() ||
                 usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
