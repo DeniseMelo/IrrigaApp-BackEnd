@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +33,7 @@ public class Usuario implements UserDetails {
     @NotNull(message = "Email é obrigatório.")
     @NotEmpty(message = "Email não pode estar vazio.")
     @Email(message = "Email deve ser válido.")
+    @Indexed(unique = true)
     private String email;
 
     @NotNull(message = "Senha é obrigatória.")
