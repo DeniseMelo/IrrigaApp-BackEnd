@@ -29,6 +29,12 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Exibir Variáveis de Ambiente
+        run: |
+          echo "SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE"
+          echo "MONGO_URI=$MONGO_URI"
+
+
       # Verifica se a URI foi passada corretamente
       - name: Verify MongoDB URI
         run: |
