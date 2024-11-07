@@ -1,6 +1,8 @@
 version: '3'
 services:
   irrigaapp:
-    build: .
+    image: denisecmf/irrigaapp:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
     ports:
       - "8080:8080"

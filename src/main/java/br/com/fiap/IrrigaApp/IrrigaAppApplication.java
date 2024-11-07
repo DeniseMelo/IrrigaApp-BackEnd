@@ -10,6 +10,9 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 public class IrrigaAppApplication {
 
 	public static void main(String[] args) {
+		// Log para verificar o valor da variável de ambiente
+		System.out.println("Mongo URI from Environment: " + System.getenv("MONGO_URI"));
+
 		SpringApplication.run(IrrigaAppApplication.class, args);
 	}
 
