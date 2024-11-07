@@ -1,12 +1,11 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+#deploy para o ambiente de desenvolvimento e testes sempre que resultar em um pull_request para a developer
 
 name: Build and deploy container app to Azure Web App - irriga-app-api-dev
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
+      - developer
   workflow_dispatch:
 
 jobs:

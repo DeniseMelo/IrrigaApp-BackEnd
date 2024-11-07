@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Continuous Integration -
 
 on:
   push:
@@ -7,15 +7,15 @@ on:
   pull_request:
     types: [opened, reopened]
     branches:
-      - "feature/**"
       - main
+  workflow_dispatch:
 
 jobs:
   tests:
     runs-on: ubuntu-latest
 
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_URI: ${{ secrets.MONGO_URI_PROD }}
 
     steps:
       - name: Git Checkout
@@ -30,19 +30,19 @@ jobs:
       # Verifica se a URI foi passada corretamente
       - name: Verify MongoDB URI
         run: |
-          echo "MONGO_URI is set to $MONGO_URI"
+          echo "MONGO_URI_PROD is set to $MONGO_URI_PROD"
 
       # Rodar testes unitários com o URI principal
       - name: Run Unit Tests
-        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI
+        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI_PROD
 
       # Rodar testes BDD (com Cucumber)
       - name: Run BDD Tests
-        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI
+        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI_PROD
 
       # Rodar testes de API (com RestAssured)
       - name: Run API Tests
-        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI
+        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI_PROD
 
       # Publicar relatórios de testes
       - name: Publish Test Report

@@ -1,0 +1,53 @@
+name: Continuous Integration - Development
+
+on:
+  push:
+    branches:
+      - developer
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - "feature/**"
+      - developer
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java SDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # Verifica se a URI foi passada corretamente
+      - name: Verify MongoDB URI
+        run: |
+          echo "MONGO_URI is set to $MONGO_URI"
+
+      # Rodar testes unitários com o URI principal
+      - name: Run Unit Tests
+        run: mvn test -Dspring.data.mongodb.uri=$MONGO_URI
+
+      # Rodar testes BDD (com Cucumber)
+      - name: Run BDD Tests
+        run: mvn verify -P bdd-tests -Dspring.data.mongodb.uri=$MONGO_URI
+
+      # Rodar testes de API (com RestAssured)
+      - name: Run API Tests
+        run: mvn verify -P api-tests -Dspring.data.mongodb.uri=$MONGO_URI
+
+      # Publicar relatórios de testes
+      - name: Publish Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: target/surefire-reports/

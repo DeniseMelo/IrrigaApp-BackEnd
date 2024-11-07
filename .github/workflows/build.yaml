@@ -1,10 +1,13 @@
-name: 02 - Workflow Filtro
+name: Generic Build and Test Workflow
 
 on:
   push:
     branches:
-      - 'feature/**'  # Qualquer branch que comece com feature/**
-      - 'main'        # Também monitora a branch main
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -34,5 +37,5 @@ jobs:
       - name: Run tests
         run: mvn test
 
-      - name: Exibir o evento
-        run: echo "Workflow disparado por ${{ github.event_name }}"
+      - name: Display Event Trigger
+        run: echo "Workflow triggered by ${{ github.event_name }}"
