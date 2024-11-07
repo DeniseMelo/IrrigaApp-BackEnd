@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://index.docker.io/v1/
-        username: ${{ secrets.AzureAppService_ContainerUsername_27de0c7d1f5a4475aaaae959866c2229 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_abf6a3c7ee4040068f9f483f5b634863 }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_27de0c7d1f5a4475aaaae959866c2229 }}/denisecmf/irrigaapp:${{ github.sha }}
+        tags: denisecmf/irrigaapp:latest
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'irriga-app-api-prod'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_b92761a5461b4fc289ee931dab1cb6d1 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_27de0c7d1f5a4475aaaae959866c2229 }}/denisecmf/irrigaapp:${{ github.sha }}'
+        images: denisecmf/irrigaapp:latest
