@@ -45,6 +45,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'irriga-app-api-dev'
-        slot-name: 'production'
+        slot-name: 'development'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_237caaae07294c338495f1396e62eb85 }}
         images: denisecmf/irrigaapp:latest
