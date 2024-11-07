@@ -16,6 +16,7 @@ jobs:
 
     env:
       MONGO_URI: ${{ secrets.MONGO_URI_PROD }}
+      SPRING_PROFILES_ACTIVE: prod
 
     steps:
       - name: Git Checkout
