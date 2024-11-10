@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/usuarios/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                        .requestMatchers("/sensores/**").permitAll()
                         .requestMatchers("/usuarios/**").hasRole("ADMIN") // Restrição apenas para endpoints de usuário
                         .anyRequest().authenticated())
                 .addFilterBefore(verificarToken, UsernamePasswordAuthenticationFilter.class)
