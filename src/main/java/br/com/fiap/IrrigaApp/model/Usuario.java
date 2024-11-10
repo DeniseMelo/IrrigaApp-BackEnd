@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,7 +43,9 @@ public class Usuario implements UserDetails {
 
     private UsuarioRole role;
 
-    // Define os papéis que o usuário pode ter
+    @DBRef
+    private List<Sensor> sensores;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UsuarioRole.ADMIN) {

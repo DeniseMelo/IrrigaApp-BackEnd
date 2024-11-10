@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SensorServiceImpl implements SensorService{
+public class SensorServiceImpl implements SensorService {
 
     @Autowired
     private SensorRepository sensorRepository;
@@ -42,24 +42,6 @@ public class SensorServiceImpl implements SensorService{
     }
 
     @Override
-    public Map<String, Double> getDadosAmbientais(String id) {
-        Sensor sensor = findById(id);
-        if (sensor != null) {
-            Map<String, Double> dadosAmbientais = new HashMap<>();
-            dadosAmbientais.put("temperatura", sensor.getTemperaturaAmbiente());
-            dadosAmbientais.put("umidade", sensor.getUmidadeSolo());
-            return dadosAmbientais;
-        }
-        return null;
-    }
-
-    @Override
-    public Boolean getStatusAtivo(String id) {
-        Sensor sensor = findById(id);
-        return (sensor != null) ? sensor.getAtivo() : null;
-    }
-
-    @Override
     public Map<String, Double> getLocalizacao(String id) {
         Sensor sensor = findById(id);
         if (sensor != null) {
@@ -69,5 +51,15 @@ public class SensorServiceImpl implements SensorService{
             return localizacao;
         }
         return null;
+    }
+
+    @Override
+    public Sensor associarSensorAoUsuario(String sensorId, String usuarioId) {
+        Sensor sensor = findById(sensorId);
+        if (sensor != null && sensor.getUsuarioId() == null) {
+            sensor.setUsuarioId(usuarioId);
+            return sensorRepository.save(sensor);  // Atualiza e salva o sensor com o novo usuário associado
+        }
+        return null;  // Retorna null caso o sensor já esteja associado ou não exista
     }
 }

@@ -17,9 +17,8 @@ public interface SensorService {
 
     Double getNivelBateria(String id);
 
-    Map<String, Double> getDadosAmbientais(String id);
-
-    Boolean getStatusAtivo(String id);
-
     Map<String, Double> getLocalizacao(String id);
+
+    Sensor associarSensorAoUsuario(String sensorId, String usuarioId);
 }
+

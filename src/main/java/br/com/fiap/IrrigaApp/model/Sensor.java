@@ -24,5 +24,5 @@ public class Sensor {
     private Double latitude;
     private Double longitude;
 
+    private String usuarioId;  // associar um sensor previamente configurado com o esp a um usuario
 }
-//adicionando um comentario  para testar a workflow novamente
