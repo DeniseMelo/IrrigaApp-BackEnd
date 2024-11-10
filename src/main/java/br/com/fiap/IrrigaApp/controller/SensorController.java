@@ -1,6 +1,7 @@
 package br.com.fiap.IrrigaApp.controller;
 
 import br.com.fiap.IrrigaApp.model.Sensor;
+import br.com.fiap.IrrigaApp.model.Leitura;
 import br.com.fiap.IrrigaApp.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,5 +52,12 @@ public class SensorController {
     public ResponseEntity<Sensor> associarSensorAoUsuario(@PathVariable String sensorId, @PathVariable String usuarioId) {
         Sensor sensorAssociado = sensorService.associarSensorAoUsuario(sensorId, usuarioId);
         return (sensorAssociado != null) ? ResponseEntity.ok(sensorAssociado) : ResponseEntity.notFound().build();
+    }
+
+    // Novo endpoint para adicionar uma leitura ao sensor
+    @PostMapping("/{sensorId}/adicionar-leitura")
+    public ResponseEntity<Sensor> adicionarLeitura(@PathVariable String sensorId, @RequestBody Leitura leitura) {
+        Sensor sensorAtualizado = sensorService.adicionarLeitura(sensorId, leitura);
+        return (sensorAtualizado != null) ? ResponseEntity.ok(sensorAtualizado) : ResponseEntity.notFound().build();
     }
 }

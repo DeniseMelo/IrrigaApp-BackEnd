@@ -1,6 +1,7 @@
 package br.com.fiap.IrrigaApp.service;
 
 import br.com.fiap.IrrigaApp.model.Sensor;
+import br.com.fiap.IrrigaApp.model.Leitura;
 import br.com.fiap.IrrigaApp.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,16 +39,20 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Double getNivelBateria(String id) {
         Sensor sensor = findById(id);
-        return (sensor != null) ? sensor.getNivelBateria() : null;
+        if (sensor != null && !sensor.getLeituras().isEmpty()) {
+            return sensor.getLeituras().get(sensor.getLeituras().size() - 1).getNivelBateria();
+        }
+        return null;
     }
 
     @Override
     public Map<String, Double> getLocalizacao(String id) {
         Sensor sensor = findById(id);
-        if (sensor != null) {
+        if (sensor != null && !sensor.getLeituras().isEmpty()) {
+            Leitura ultimaLeitura = sensor.getLeituras().get(sensor.getLeituras().size() - 1);
             Map<String, Double> localizacao = new HashMap<>();
-            localizacao.put("latitude", sensor.getLatitude());
-            localizacao.put("longitude", sensor.getLongitude());
+            localizacao.put("latitude", ultimaLeitura.getLatitude());
+            localizacao.put("longitude", ultimaLeitura.getLongitude());
             return localizacao;
         }
         return null;
@@ -58,8 +63,18 @@ public class SensorServiceImpl implements SensorService {
         Sensor sensor = findById(sensorId);
         if (sensor != null && sensor.getUsuarioId() == null) {
             sensor.setUsuarioId(usuarioId);
-            return sensorRepository.save(sensor);  // Atualiza e salva o sensor com o novo usuário associado
+            return sensorRepository.save(sensor);
         }
-        return null;  // Retorna null caso o sensor já esteja associado ou não exista
+        return null;
+    }
+
+    @Override
+    public Sensor adicionarLeitura(String sensorId, Leitura leitura) {
+        Sensor sensor = findById(sensorId);
+        if (sensor != null) {
+            sensor.adicionarLeitura(leitura);
+            return sensorRepository.save(sensor);
+        }
+        return null;
     }
 }

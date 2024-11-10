@@ -1,6 +1,7 @@
 package br.com.fiap.IrrigaApp.service;
 
 import br.com.fiap.IrrigaApp.model.Sensor;
+import br.com.fiap.IrrigaApp.model.Leitura; // Importando a classe Leitura
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +21,7 @@ public interface SensorService {
     Map<String, Double> getLocalizacao(String id);
 
     Sensor associarSensorAoUsuario(String sensorId, String usuarioId);
-}
 
+    // Novo método para adicionar uma leitura ao sensor
+    Sensor adicionarLeitura(String sensorId, Leitura leitura);
+}

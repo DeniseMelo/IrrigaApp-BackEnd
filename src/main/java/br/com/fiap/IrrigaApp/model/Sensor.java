@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,10 +20,12 @@ public class Sensor {
     @Id
     private String id;
     private String nomeSensor;
-    private Double umidadeSolo;
-    private Double nivelBateria;
-    private Double latitude;
-    private Double longitude;
+    private String usuarioId;
 
-    private String usuarioId;  // associar um sensor previamente configurado com o esp a um usuario
+    // Lista para armazenar leituras (inclui todos os dados variáveis)
+    private List<Leitura> leituras = new ArrayList<>();
+
+    public void adicionarLeitura(Leitura leitura) {
+        this.leituras.add(leitura);
+    }
 }
