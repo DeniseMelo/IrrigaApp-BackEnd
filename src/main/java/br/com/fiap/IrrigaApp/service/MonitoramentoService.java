@@ -13,7 +13,7 @@ import java.util.List;
 //caso no futuro eu implemente a válvula automatizando realmente a aplicaçao
 @Service
 public class MonitoramentoService {
-
+/*
     @Autowired
     private RegraIrrigacaoRepository regraRepository;
 
@@ -51,5 +51,5 @@ public class MonitoramentoService {
                 }
             }
         }
-    }
+    }*/
 }
