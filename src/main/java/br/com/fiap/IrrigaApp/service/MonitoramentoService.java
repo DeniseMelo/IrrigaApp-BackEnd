@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+//caso no futuro eu implemente a válvula automatizando realmente a aplicaçao
 @Service
 public class MonitoramentoService {
 
@@ -32,26 +32,20 @@ public class MonitoramentoService {
             if (regra.getAtiva()) {
                 Sensor sensor = sensorRepository.findById(regra.getSensorId()).orElse(null);
                 if (sensor != null) {
-                    boolean temperaturaAtende = true;
                     boolean umidadeAtende = true;
-
-                    // Verifica a temperatura
-                    if (regra.getTemperaturaLimite() != null && sensor.getTemperaturaAmbiente() != null) {
-                        temperaturaAtende = sensor.getTemperaturaAmbiente() >= regra.getTemperaturaLimite();
-                    }
 
                     // Verifica a umidade
                     if (regra.getUmidadeLimite() != null && sensor.getUmidadeSolo() != null) {
                         umidadeAtende = sensor.getUmidadeSolo() <= regra.getUmidadeLimite();
                     }
 
-                    if (temperaturaAtende && umidadeAtende) {
+                    if ( umidadeAtende) {
                         // Ativa a válvula
                         Valvula valvula = valvulaRepository.findById(regra.getValvulaId()).orElse(null);
                         if (valvula != null && (valvula.getEstadoAtivo() == null || !valvula.getEstadoAtivo())) {
                             valvula.setEstadoAtivo(true);
                             valvulaRepository.save(valvula);
-                            // Opcional: Registrar data/hora de ativação
+                            // implementar!!!!!
                         }
                     }
                 }
