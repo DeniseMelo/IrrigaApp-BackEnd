@@ -18,9 +18,7 @@ public class Sensor {
     private String id;
     private String nomeSensor;
     private Double umidadeSolo;
-    private Double temperaturaAmbiente;
     private Double nivelBateria;
-    private Boolean ativo;
     private Double latitude;
     private Double longitude;
 
